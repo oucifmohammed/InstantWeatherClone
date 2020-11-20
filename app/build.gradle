@@ -96,4 +96,7 @@ dependencies {
 
     //DataStore
     implementation "androidx.datastore:datastore-preferences:1.0.0-alpha02"
+
+    //CalenderView
+    implementation 'com.github.shrikanth7698:Collapsible-Calendar-View-Android:v1.0.3'
 }

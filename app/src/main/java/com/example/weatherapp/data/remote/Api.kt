@@ -13,4 +13,17 @@ interface Api {
         @Query("lon") lon: Double,
         @Query("appid") appid: String = BuildConfig.API_KEY
     ): Response<WeatherResponse>
+
+    @GET("weather")
+    suspend fun searchForWeather(
+        @Query("q") location: String,
+        @Query("appid") appid: String = BuildConfig.API_KEY
+    ): Response<WeatherResponse>
+
+    @GET("data/2.5/forecast")
+    suspend fun getWeatherForecast(
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
+        @Query("appid") appid: String = BuildConfig.API_KEY
+    ): Response<ForecastWeatherResponse>
 }

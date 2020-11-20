@@ -120,6 +120,8 @@ class HomeFragment : Fragment() {
         inflater.inflate(R.menu.appbar_menu, menu)
 
         val updateIcon = menu.findItem(R.id.updateIcon)
+        val searchIcon = menu.findItem(R.id.searchIcon)
+        searchIcon.isVisible = false
 
         updateIcon.setOnMenuItemClickListener {
             getCurrentWeather()

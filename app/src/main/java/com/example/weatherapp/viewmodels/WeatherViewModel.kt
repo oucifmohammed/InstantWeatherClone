@@ -18,9 +18,18 @@ class WeatherViewModel @ViewModelInject constructor(
     private val _currentWeather = MutableLiveData<Resource<WeatherResponse>>()
     val currentWeather: LiveData<Resource<WeatherResponse>> = _currentWeather
 
+    private val _searchWeather = MutableLiveData<Resource<WeatherResponse>>()
+    val searchWeather: LiveData<Resource<WeatherResponse>> = _searchWeather
+
     fun getCurrentWeather(lat: Double,lon: Double) = viewModelScope.launch {
         _currentWeather.value = Resource.loading(null)
         val response = repository.getCurrentWeather(lat,lon)
         _currentWeather.value = response
+    }
+
+    fun searchForWeather(location: String) = viewModelScope.launch {
+        _searchWeather.value = Resource.loading(null)
+        val response = repository.searchForWeather(location)
+        _searchWeather.value = response
     }
 }
