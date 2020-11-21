@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/forcastFragment"
-        android:name="com.example.weatherapp.ui.ForcastFragment"
+        android:name="com.example.weatherapp.ui.ForecastFragment"
         android:label="fragment_forcast"
         tools:layout="@layout/fragment_forcast" />
     <fragment

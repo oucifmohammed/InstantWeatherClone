@@ -20,7 +20,7 @@ interface Api {
         @Query("appid") appid: String = BuildConfig.API_KEY
     ): Response<WeatherResponse>
 
-    @GET("data/2.5/forecast")
+    @GET("forecast")
     suspend fun getWeatherForecast(
         @Query("lat") lat: Double,
         @Query("lon") lon: Double,

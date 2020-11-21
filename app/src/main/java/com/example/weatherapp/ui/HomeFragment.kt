@@ -94,6 +94,7 @@ class HomeFragment : Fragment() {
                 ), 1
             )
         } else {
+            if(MainActivity.viewModel.currentWeather.value == null)
             getCurrentWeather()
         }
 
@@ -128,6 +129,7 @@ class HomeFragment : Fragment() {
             true
         }
     }
+
     @SuppressLint("SetTextI18n")
     private fun provideCurrentWeatherDataToScreen(currentWeather: Resource<WeatherResponse>) {
         binding.progress.visibility = View.INVISIBLE
@@ -170,7 +172,7 @@ class HomeFragment : Fragment() {
                 showDialog()
                 return
             }
-            lifecycleScope.launch {
+            viewLifecycleOwner.lifecycleScope.launch {
                 val location = withContext(Dispatchers.IO) {
                     fusedLocationProviderClient.lastLocation.await()
                 }

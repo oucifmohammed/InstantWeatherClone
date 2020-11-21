@@ -74,13 +74,15 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.github.pwittchen.weathericonview.WeatherIconView
+            android:id="@+id/weatherIconView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="25dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:weatherIconColor="@color/white" />
+            app:weatherIconColor="@color/white"
+            app:weatherIconSize="60"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/accelerate"
