@@ -3,6 +3,7 @@ package com.example.weatherapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.weatherapp.databinding.ActivityMainBinding
@@ -25,8 +26,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.bottomNavigationView.setupWithNavController(navHostFragment.findNavController())
+        binding.bottomNavigationView.setOnNavigationItemReselectedListener { /*No operation*/ }
         viewModel = ViewModelProvider(this).get(WeatherViewModel::class.java)
-
     }
 
 }

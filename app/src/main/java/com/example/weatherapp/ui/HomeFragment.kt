@@ -260,6 +260,8 @@ class HomeFragment : Fragment() {
                     "${temp.minus(273.15).roundToInt()}\u2103"
             }
         }
+
+        binding.internetText.visibility = View.INVISIBLE
     }
 
     private fun showDialog() {

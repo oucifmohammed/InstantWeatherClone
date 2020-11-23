@@ -52,4 +52,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarView"
         android:visibility="invisible"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

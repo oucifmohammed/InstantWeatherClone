@@ -4,15 +4,23 @@ import android.annotation.SuppressLint
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import com.example.weatherapp.data.remote.ForecastWeatherResponse
 import com.example.weatherapp.databinding.WeatherItemBinding
 import com.example.weatherapp.other.WeatherIconGenerator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Default
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
 class ForecastWeatherRecyclerViewAdapter(private val interaction: Interaction? = null) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    RecyclerView.Adapter<RecyclerView.ViewHolder>(),Filterable{
+
+    var foreCastList: List<ForecastWeatherResponse.WeatherForecast>? = null
 
     val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ForecastWeatherResponse.WeatherForecast>() {
 
@@ -46,22 +54,27 @@ class ForecastWeatherRecyclerViewAdapter(private val interaction: Interaction? =
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ForecastWeatherViewHolder -> {
-                holder.bind(differ.currentList[position])
+                holder.bind(foreCastList?.get(position)!!)
             }
         }
     }
 
     override fun getItemCount(): Int {
-        return differ.currentList.size
+        return if(foreCastList == null){
+            differ.currentList.size
+        }else {
+            foreCastList!!.size
+        }
     }
 
     fun submitList(list: List<ForecastWeatherResponse.WeatherForecast>) {
         differ.submitList(list)
+        foreCastList = differ.currentList
     }
 
     class ForecastWeatherViewHolder
     (
-        private val binding: WeatherItemBinding,
+        private var binding: WeatherItemBinding,
         private val interaction: Interaction?
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -80,9 +93,37 @@ class ForecastWeatherRecyclerViewAdapter(private val interaction: Interaction? =
 
             WeatherIconGenerator.getIconResources(context,binding.weatherIconView,item.weatherDescriptions.first().description)
         }
+
     }
+
 
     interface Interaction {
         fun onItemSelected(position: Int, item: ForecastWeatherResponse.WeatherForecast)
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(date: CharSequence?): FilterResults {
+                val selectedDate = date.toString()
+
+                val resultResult = ArrayList<ForecastWeatherResponse.WeatherForecast>()
+                for(row in differ.currentList){
+                    if(row.dt_txt.contains(selectedDate)){
+                        resultResult.add(row)
+                    }
+                }
+
+                val filterResult = FilterResults()
+                filterResult.values = resultResult
+
+                return filterResult
+            }
+
+            override fun publishResults(date: CharSequence?, result: FilterResults?) {
+                foreCastList = result?.values as List<ForecastWeatherResponse.WeatherForecast>
+
+                notifyDataSetChanged()
+            }
+        }
     }
 }

@@ -6,15 +6,14 @@ import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.MainActivity
+import com.example.weatherapp.R
 import com.example.weatherapp.adapters.ForecastWeatherRecyclerViewAdapter
 import com.example.weatherapp.databinding.FragmentForcastBinding
 import com.example.weatherapp.other.Operations
@@ -54,10 +53,27 @@ class ForecastFragment : Fragment() {
     ): View? {
 
         _activity = activity as MainActivity
-
         _activity.supportActionBar?.title = "Forecast"
         _binding = FragmentForcastBinding.inflate(inflater,container,false)
+
+        setHasOptionsMenu(true)
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.appbar_menu,menu)
+
+        val updateIcon = menu.findItem(R.id.updateIcon)
+        val searchIcon = menu.findItem(R.id.searchIcon)
+
+        searchIcon.isVisible = false
+
+        updateIcon.setOnMenuItemClickListener {
+            binding.forecastWeatherList.visibility = View.INVISIBLE
+            getForecastWeather()
+            true
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -88,6 +104,7 @@ class ForecastFragment : Fragment() {
             }else{
                 binding.progressCircular.visibility = View.INVISIBLE
                 _adapter.submitList(it.data!!.weathers)
+                binding.forecastWeatherList.visibility = View.VISIBLE
             }
         })
 
@@ -98,7 +115,6 @@ class ForecastFragment : Fragment() {
             }
 
             override fun onDataUpdate() {
-
             }
 
             override fun onDayChanged() {
@@ -107,11 +123,9 @@ class ForecastFragment : Fragment() {
 
             override fun onDaySelect() {
                 val day = binding.calendarView.selectedDay
-                Toast.makeText(
-                    requireContext(),
-                    "${day?.year}-${day?.month?.plus(1)}-${day?.day}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                    _adapter.filter.
+                    filter("${day?.year}-${day?.month?.plus(1)}-${day?.day}")
+
             }
 
             override fun onItemClick(v: View) {
@@ -151,6 +165,7 @@ class ForecastFragment : Fragment() {
             binding.internetText.visibility = View.INVISIBLE
         }else{
             binding.internetText.visibility = View.VISIBLE
+            binding.forecastWeatherList.visibility = View.INVISIBLE
         }
     }
 
