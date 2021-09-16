@@ -8,3 +8,4 @@ Weather App that shows weather data for the user location and for other places d
 - MVVM pattern.
 - Kotlin Coroutines.
 - Retrofit.
+- Dagger Hilt.
